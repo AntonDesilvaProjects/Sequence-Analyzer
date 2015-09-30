@@ -9,12 +9,12 @@ import com.data.*;
 public class MutationDAL {
 
 	private String filePath;
-	private List<ProteinSequence> proteinSequenceList;
+	private List<String> rawMutationData;//Contains data in format: ENSP00000123456 ABC2 K12S
+	
 	
 	public MutationDAL()
 	{
 		filePath = null;
-		proteinSequenceList = null;
 	}
 	
 	public void setFilePath( String path )
@@ -22,20 +22,21 @@ public class MutationDAL {
 		if( path != null)
 		{
 			filePath = path;
-			proteinSequenceList = generateProteinSequences( path );
+			generateProteinSequences( path );
+		}
+		else
+		{
+			javax.swing.JOptionPane.showMessageDialog(null, "Please enter a valid file path!");
 		}
 	}
-	public ArrayList<ProteinSequence> generateProteinSequences( String fileLocation)
+	public void generateProteinSequences( String fileLocation)
 	{
 		String currentLine = "";
-		String currentProteinID = "";
-		String currentGeneSymbol = "";
-		String currentMutation = "";
-		String[] tokens ;
 		
 		FileReader file;
 		BufferedReader reader;
-		ArrayList<ProteinSequence> sequenceList = new ArrayList<ProteinSequence>();
+		rawMutationData = new ArrayList<String>();
+		
 		try
 		{
 			file = new FileReader( fileLocation );
@@ -43,14 +44,8 @@ public class MutationDAL {
 			
 			while( ( currentLine = reader.readLine() ) != null)
 			{
-				tokens = currentLine.split("\\s+");
-				currentProteinID = tokens[0];
-				if( !currentProteinID.equals( "N/A") )
-				{
-					currentGeneSymbol = tokens[1];
-					currentMutation = tokens[2];
-					System.out.println( currentProteinID + " " + currentGeneSymbol + " " + currentMutation);
-				}
+				rawMutationData.add(currentLine);
+				System.out.println( currentLine ); //Debug
 			}
 		}
 		catch(FileNotFoundException fileNotFound)
@@ -61,10 +56,15 @@ public class MutationDAL {
 		{
 			javax.swing.JOptionPane.showMessageDialog(null, io.getMessage());
 		}
-		return sequenceList;
 	}
+	
 	private String getFilePath() {
 		return filePath;
+	}
+	
+	public List<String> getRawMutation()
+	{
+		return rawMutationData;
 	}
 	
 }
