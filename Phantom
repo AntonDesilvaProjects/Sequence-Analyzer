@@ -1,0 +1,82 @@
+package com.automated.testing;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+public class TestRunner {
+	public static void main(String[] args)
+	{	
+		//Username: loiane
+		//Password: Packt123@
+		//http://yizeng.me/2017/01/15/tips-for-locating-elements-in-ext-js-applications-with-selenium-webdriver/
+		
+		DesiredCapabilities caps = DesiredCapabilities.phantomjs();
+		caps.setJavascriptEnabled(true);
+		caps.setCapability(
+			PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, 
+			FilePaths.PHANTOMJS_DRIVER_EXE
+		);
+		WebDriver driver = new PhantomJSDriver( caps );
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		
+		/*DesiredCapabilities caps = DesiredCapabilities.chrome();
+		caps.setJavascriptEnabled(true);
+		System.setProperty("webdriver.chrome.driver", FilePaths.CHROME_DRIVER_EXE);
+		WebDriver driver = new ChromeDriver( caps );
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);*/
+		
+		
+		
+		driver.get("http://localhost/masteringextjs/");
+		
+		System.out.println( "Page Title: " + driver.getTitle());
+		
+		//Get the Username + Password fields and fill them with credentials
+		List<WebElement> credentialFields = driver.findElements(By.cssSelector("input"));
+		credentialFields.get(0).sendKeys("loiane");
+		credentialFields.get(1).sendKeys("Packt123@");
+		
+		
+		List<WebElement> buttons = driver.findElements(By.className("x-btn"));
+		buttons.get(2).click();
+		
+		
+		
+		WebElement logout = driver.findElement(By.cssSelector("x-tool-img"));
+		System.out.println( logout.getText());
+	}
+}
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.automated.testing</groupId>
+  <artifactId>CucumberPhantom</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  
+  <dependencies>
+  	<dependency>
+    	<groupId>org.seleniumhq.selenium</groupId>
+    	<artifactId>selenium-java</artifactId>
+    	<version>3.4.0</version>
+  	</dependency>
+  	<!--   
+  		<dependency>
+    		<groupId>com.github.detro.ghostdriver</groupId>
+    		<artifactId>phantomjsdriver</artifactId>
+    		<version>1.0.1</version>
+		</dependency>
+	-->
+  </dependencies>
+  
+  
+  </project>
